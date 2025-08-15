@@ -258,41 +258,37 @@ export default function Home() {
         )}
       </main>
        <footer className="w-full py-6 z-10">
-        <div className="container mx-auto max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 px-4 text-center md:text-left">
-          <div className="flex items-center gap-4">
-              <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Github className="h-6 w-6" />
+        <div className="container mx-auto max-w-4xl flex flex-col items-center gap-4 px-4 text-center">
+            <div className="flex items-center gap-4">
+                <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Github className="h-6 w-6" />
+                </a>
+                <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Linkedin className="h-6 w-6" />
+                </a>
+                <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Instagram className="h-6 w-6" />
+                </a>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm w-full sm:w-auto">
+                  <Mail className="mr-2 h-4 w-4"/>
+                  Give Feedback
+                </Button>
               </a>
-              <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Linkedin className="h-6 w-6" />
+              <a href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm w-full sm:w-auto">
+                  <Coffee className="mr-2 h-4 w-4"/>
+                  Buy me a coffee
+                </Button>
               </a>
-              <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Instagram className="h-6 w-6" />
-              </a>
-          </div>
-          <div className="flex items-center gap-4">
-            <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
-                <Mail className="mr-2 h-4 w-4"/>
-                Give Feedback
-              </Button>
-            </a>
-            <a href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
-                <Coffee className="mr-2 h-4 w-4"/>
-                Buy me a coffee
-              </Button>
-            </a>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Built with ❤️ by Sreehari
-          </p>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Built with ❤️ by Sreehari
+            </p>
         </div>
       </footer>
     </div>
   );
 }
-
-    
-
-    

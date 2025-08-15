@@ -270,7 +270,7 @@ export default function Home() {
                   <Instagram className="h-6 w-6" />
               </a>
           </div>
-          <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer">
+          <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
               <Mail className="mr-2 h-4 w-4"/>
               Give Feedback

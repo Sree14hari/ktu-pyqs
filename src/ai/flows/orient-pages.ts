@@ -15,7 +15,8 @@ const OrientQuestionPaperPagesInputSchema = z.object({
   pdfDataUri: z
     .string()
     .describe(
-      'A PDF document as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'    ),
+      'A PDF document as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
+    ),
 });
 export type OrientQuestionPaperPagesInput = z.infer<typeof OrientQuestionPaperPagesInputSchema>;
 
@@ -23,7 +24,8 @@ const OrientQuestionPaperPagesOutputSchema = z.object({
   orientedPdfDataUri: z
     .string()
     .describe(
-      'A PDF document as a data URI, with all pages oriented correctly, that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'    ),
+      'A PDF document as a data URI, with all pages oriented correctly, that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
+    ),
 });
 export type OrientQuestionPaperPagesOutput = z.infer<typeof OrientQuestionPaperPagesOutputSchema>;
 
@@ -33,30 +35,33 @@ export async function orientQuestionPaperPages(
   return orientQuestionPaperPagesFlow(input);
 }
 
-const pageOrientationTool = ai.defineTool({
-  name: 'pageOrientation',
-  description: 'Analyzes a single page image and determines if it needs rotation to be right-side-up.',
-  inputSchema: z.object({
-    pageDataUri: z
-      .string()
-      .describe(
-        'A single page image as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'      ),
-  }),
-  outputSchema: z.object({
-    rotationNeeded: z
-      .number()
-      .describe(
-        'The number of degrees to rotate the image clockwise to be right-side-up. Should be 0, 90, 180, or 270.'
-      ),
-  }),
-  async input => {
+const pageOrientationTool = ai.defineTool(
+  {
+    name: 'pageOrientation',
+    description: 'Analyzes a single page image and determines if it needs rotation to be right-side-up.',
+    inputSchema: z.object({
+      pageDataUri: z
+        .string()
+        .describe(
+          'A single page image as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
+        ),
+    }),
+    outputSchema: z.object({
+      rotationNeeded: z
+        .number()
+        .describe(
+          'The number of degrees to rotate the image clockwise to be right-side-up. Should be 0, 90, 180, or 270.'
+        ),
+    }),
+  },
+  async (input) => {
     // In a real implementation, this would use an OCR library or service
     // to determine the correct rotation.
     // This placeholder always returns 0.
     console.log('Page orientation tool called', input.pageDataUri.substring(0, 100));
     return {rotationNeeded: 0};
-  },
-});
+  }
+);
 
 const orientQuestionPaperPagesPrompt = ai.definePrompt({
   name: 'orientQuestionPaperPagesPrompt',

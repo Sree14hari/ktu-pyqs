@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
 import { QuestionPaper, findPapersBySubject } from '@/lib/mock-data';
 import { dataUriToUint8Array } from '@/lib/pdf-utils';
@@ -16,6 +16,17 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BookOpen, Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
+const loadingMessages = [
+  "Initializing process...",
+  "Gathering selected papers...",
+  "Establishing secure connection...",
+  "Fetching question papers...",
+  "This may take a moment...",
+  "Compiling documents...",
+  "Almost there...",
+  "Finalizing your PDF...",
+];
+
 export default function Home() {
   const [subjectCode, setSubjectCode] = useState('');
   const [searchResults, setSearchResults] = useState<QuestionPaper[]>([]);
@@ -25,6 +36,21 @@ export default function Home() {
   const [generatedPdfUrl, setGeneratedPdfUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isGenerating) {
+      setLoadingMessage(loadingMessages[0]); // Reset to the first message
+      let messageIndex = 1;
+      interval = setInterval(() => {
+        setLoadingMessage(loadingMessages[messageIndex % loadingMessages.length]);
+        messageIndex = (messageIndex + 1);
+      }, 2500);
+    }
+    return () => clearInterval(interval);
+  }, [isGenerating]);
+
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -213,7 +239,7 @@ export default function Home() {
               )}
                <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0} className="w-full sm:w-auto rounded-lg">
                 {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
-                {isGenerating ? `Generating PDF... (${selectedPapers.size} papers)` : `Generate PDF (${selectedPapers.size})`}
+                {isGenerating ? loadingMessage : `Generate PDF (${selectedPapers.size})`}
               </Button>
               {generatedPdfUrl && (
                  <Button onClick={handleDownload} variant="outline" className="w-full sm:w-auto rounded-lg">
@@ -251,4 +277,4 @@ export default function Home() {
       </footer>
     </div>
   );
- 
+}

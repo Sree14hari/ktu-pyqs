@@ -14,7 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail } from 'lucide-react';
+import { Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail, Coffee } from 'lucide-react';
 
 const loadingMessages = [
   "Initializing process...",
@@ -270,12 +270,20 @@ export default function Home() {
                   <Instagram className="h-6 w-6" />
               </a>
           </div>
-          <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
-              <Mail className="mr-2 h-4 w-4"/>
-              Give Feedback
-            </Button>
-          </a>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
+                <Mail className="mr-2 h-4 w-4"/>
+                Give Feedback
+              </Button>
+            </a>
+            <a href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
+                <Coffee className="mr-2 h-4 w-4"/>
+                Buy me a coffee
+              </Button>
+            </a>
+          </div>
           <p className="text-sm text-muted-foreground">
             Built with ❤️ by Sreehari
           </p>
@@ -284,3 +292,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

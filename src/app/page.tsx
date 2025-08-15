@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -109,12 +110,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background font-body text-foreground">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
       <main className="container mx-auto max-w-4xl p-4 md:p-8">
-        <header className="flex flex-col items-center justify-center text-center py-8">
-          <BookOpen className="h-12 w-12 text-primary mb-4" />
+        <header className="flex flex-col items-center justify-center text-center py-6">
+          <BookOpen className="h-16 w-16 text-primary mb-3" />
           <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
-          <p className="mt-2 text-lg text-muted-foreground">Your one-stop solution for KTU question papers.</p>
+          <p className="mt-2 text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
         </header>
 
         {error && (
@@ -125,25 +126,25 @@ export default function Home() {
           </Alert>
         )}
 
-        <Card className="w-full shadow-lg rounded-xl">
-          <CardHeader>
+        <Card className="w-full shadow-lg rounded-2xl border-2 border-transparent hover:border-primary/20 transition-all duration-300">
+          <CardHeader className="pt-4 pb-2">
             <CardTitle className="text-2xl flex items-center gap-2">
               <Search className="h-6 w-6 text-primary" />
               Find Question Papers
             </CardTitle>
             <CardDescription>Enter a subject code to begin your search (e.g., CS301, MA201).</CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
+          <CardContent className="p-4">
+            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
               <Input
                 type="text"
                 placeholder="Enter Subject Code"
                 value={subjectCode}
                 onChange={(e) => setSubjectCode(e.target.value.toUpperCase())}
-                className="text-base"
+                className="text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all"
                 aria-label="Subject Code"
               />
-              <Button type="submit" disabled={isSearching || !subjectCode}>
+              <Button type="submit" disabled={isSearching || !subjectCode} className="h-12 rounded-lg text-lg bg-primary/90 hover:bg-primary transition-all">
                 {isSearching ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2" />}
                 {isSearching ? 'Searching...' : 'Search'}
               </Button>
@@ -152,7 +153,7 @@ export default function Home() {
         </Card>
 
         {(isSearching || searchResults.length > 0) && (
-          <Card className="mt-8 shadow-lg rounded-xl">
+          <Card className="mt-8 shadow-lg rounded-2xl">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-2">
                 <FileText className="h-6 w-6 text-primary" />
@@ -173,12 +174,13 @@ export default function Home() {
               ) : (
                 <div className="space-y-4">
                   {searchResults.map((paper) => (
-                    <div key={paper.id} className="flex items-center space-x-3 p-2 rounded-md transition-colors hover:bg-muted">
+                    <div key={paper.id} className="flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-muted">
                       <Checkbox
                         id={paper.id}
                         checked={selectedPapers.has(paper.id)}
                         onCheckedChange={(checked) => handleSelectionChange(paper.id, !!checked)}
                         aria-labelledby={`label-${paper.id}`}
+                        className="h-5 w-5"
                       />
                       <Label htmlFor={paper.id} id={`label-${paper.id}`} className="text-base font-normal cursor-pointer flex-grow">
                         {paper.subjectCode} - {paper.name}
@@ -188,13 +190,13 @@ export default function Home() {
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-end gap-4 bg-slate-50 p-4 rounded-b-xl border-t">
-               <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0}>
+            <CardFooter className="flex flex-col sm:flex-row justify-end gap-4 bg-slate-50 p-4 rounded-b-2xl border-t">
+               <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0} className="rounded-lg">
                 {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
                 {isGenerating ? 'Generating PDF...' : `Generate PDF (${selectedPapers.size} selected)`}
               </Button>
               {generatedPdfUrl && (
-                 <Button onClick={handleDownload} variant="outline">
+                 <Button onClick={handleDownload} variant="outline" className="rounded-lg">
                   <Download className="mr-2" />
                   Download Merged PDF
                 </Button>

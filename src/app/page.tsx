@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
-import { QuestionPaper, findPapersBySubject, fetchPdfAsDataUri } from '@/lib/mock-data';
+import { QuestionPaper, findPapersBySubject } from '@/lib/mock-data';
 import { dataUriToUint8Array } from '@/lib/pdf-utils';
 import { useToast } from "@/hooks/use-toast";
 
@@ -72,12 +72,9 @@ export default function Home() {
 
     try {
       const papersToMerge = searchResults.filter(p => selectedPapers.has(p.id));
+      const paperUrls = papersToMerge.map(p => p.pdfUrl);
       
-      const paperDataUris = await Promise.all(
-        papersToMerge.map(paper => fetchPdfAsDataUri(paper.pdfUrl))
-      );
-      
-      const result = await orientQuestionPaperPages({ pdfDataUris: paperDataUris });
+      const result = await orientQuestionPaperPages({ pdfUrls: paperUrls });
       const mergedPdfUri = result.mergedPdfDataUri;
       
       const blob = new Blob([dataUriToUint8Array(mergedPdfUri)], { type: 'application/pdf' });

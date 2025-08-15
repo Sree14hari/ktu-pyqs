@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
 import { QuestionPaper, findPapersBySubject } from '@/lib/mock-data';
 import { dataUriToUint8Array } from '@/lib/pdf-utils';
@@ -14,7 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BookOpen, Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail } from 'lucide-react';
+import { Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
 const loadingMessages = [
   "Initializing process...",
@@ -153,7 +154,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
       <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8">
         <header className="flex flex-col items-center justify-center text-center py-6 md:py-8">
-          <BookOpen className="h-12 w-12 md:h-16 md:w-16 text-primary mb-3" />
+          <Image src="/logo.png" alt="PYQ Access Logo" width={80} height={80} className="mb-3" />
           <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
           <p className="mt-2 text-md md:text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
         </header>
@@ -278,3 +279,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

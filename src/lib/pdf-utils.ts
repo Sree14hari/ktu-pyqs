@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
 
-// Helper to convert data URI to Uint8Array. `atob` is deprecated in Node but fine in browsers.
-function dataUriToUint8Array(dataUri: string): Uint8Array {
+// Helper to convert data URI to Uint8Array.
+export function dataUriToUint8Array(dataUri: string): Uint8Array {
     const base64 = dataUri.split(',')[1];
     if (!base64) {
         throw new Error("Invalid data URI: no base64 content");
@@ -33,7 +33,10 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
     for (const dataUri of pdfDataUris) {
         try {
             const pdfBytes = dataUriToUint8Array(dataUri);
-            const pdfDoc = await PDFDocument.load(pdfBytes);
+            const pdfDoc = await PDFDocument.load(pdfBytes, {
+                // Skips trying to parse the structure of malformed PDFs.
+                updateMetadata: false 
+            });
             const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
             copiedPages.forEach((page) => {
                 mergedPdf.addPage(page);

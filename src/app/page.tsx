@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
 import { QuestionPaper, findPapersBySubject } from '@/lib/mock-data';
-import { mergePdfs } from '@/lib/pdf-utils';
+import { mergePdfs, dataUriToUint8Array } from '@/lib/pdf-utils';
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from '@/components/ui/button';
@@ -35,16 +35,20 @@ export default function Home() {
     setSelectedPapers(new Set());
     setSearchResults([]);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const results = findPapersBySubject(subjectCode);
-    if (results.length === 0) {
-      setError(`No question papers found for subject code "${subjectCode}".`);
+    try {
+      const results = await findPapersBySubject(subjectCode);
+      if (results.length === 0) {
+        setError(`No question papers found for subject code "${subjectCode}".`);
+      }
+      setSearchResults(results);
+    } catch (err) {
+      setError("Failed to fetch question papers. The source might be down or the subject code is incorrect.");
+      console.error(err);
+    } finally {
+      setIsSearching(false);
     }
-    setSearchResults(results);
-    setIsSearching(false);
   };
-
+  
   const handleSelectionChange = (paperId: string, isSelected: boolean) => {
     const newSelection = new Set(selectedPapers);
     if (isSelected) {
@@ -69,8 +73,19 @@ export default function Home() {
     try {
       const papersToMerge = searchResults.filter(p => selectedPapers.has(p.id));
       
-      const orientedPdfUrisPromises = papersToMerge.map(paper => 
-        orientQuestionPaperPages({ pdfDataUri: paper.pdfDataUri })
+      const paperDataUris = await Promise.all(papersToMerge.map(async (paper) => {
+        const response = await fetch(paper.pdfUrl);
+        const blob = await response.blob();
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+      }));
+
+      const orientedPdfUrisPromises = paperDataUris.map(pdfDataUri => 
+        orientQuestionPaperPages({ pdfDataUri })
       );
       
       const orientedResults = await Promise.all(orientedPdfUrisPromises);
@@ -78,8 +93,7 @@ export default function Home() {
 
       const mergedPdfUri = await mergePdfs(orientedPdfUris);
       
-      const response = await fetch(mergedPdfUri);
-      const blob = await response.blob();
+      const blob = new Blob([dataUriToUint8Array(mergedPdfUri)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       setGeneratedPdfUrl(url);
       toast({

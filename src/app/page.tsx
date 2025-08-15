@@ -150,8 +150,14 @@ export default function Home() {
   const allSelected = searchResults.length > 0 && selectedPapers.size === searchResults.length;
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
-      <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8">
+    <div className="relative flex flex-col min-h-screen bg-background font-body text-foreground overflow-hidden">
+       <div className="animated-bg">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
+        <div className="shape shape3"></div>
+        <div className="shape shape4"></div>
+      </div>
+      <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8 z-10">
         <header className="flex flex-col items-center justify-center text-center py-6 md:py-8">
           <div className="font-logo text-6xl font-bold text-primary mb-3">SHR</div>
           <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
@@ -159,14 +165,14 @@ export default function Home() {
         </header>
 
         {error && (
-          <Alert variant="destructive" className="mb-6 bg-red-50 border-red-200">
+          <Alert variant="destructive" className="mb-6 bg-red-50/80 border-red-200 backdrop-blur-sm">
             <AlertCircle className="h-4 w-4 text-red-600" />
             <AlertTitle className="text-red-800">Error</AlertTitle>
             <AlertDescription className="text-red-700">{error}</AlertDescription>
           </Alert>
         )}
 
-        <Card className="w-full shadow-lg rounded-2xl border-2 border-transparent hover:border-primary/20 transition-all duration-300">
+        <Card className="w-full shadow-lg rounded-2xl border-2 border-transparent hover:border-primary/20 transition-all duration-300 bg-white/50 backdrop-blur-md">
           <CardHeader className="pt-4 pb-2">
             <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
               <Search className="h-5 w-5 md:h-6 md:w-6 text-primary" />
@@ -181,7 +187,7 @@ export default function Home() {
                 placeholder="Enter Subject Code"
                 value={subjectCode}
                 onChange={(e) => setSubjectCode(e.target.value.toUpperCase())}
-                className="text-base md:text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all"
+                className="text-base md:text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all bg-white/70"
                 aria-label="Subject Code"
               />
               <Button type="submit" disabled={isSearching || !subjectCode} className="h-12 w-full sm:w-auto rounded-lg text-base md:text-lg bg-primary/90 hover:bg-primary transition-all">
@@ -193,7 +199,7 @@ export default function Home() {
         </Card>
 
         {(isSearching || searchResults.length > 0) && (
-          <Card className="mt-8 shadow-lg rounded-2xl">
+          <Card className="mt-8 shadow-lg rounded-2xl bg-white/50 backdrop-blur-md">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
                 <FileText className="h-5 w-5 md:h-6 md:w-6 text-primary" />
@@ -206,15 +212,15 @@ export default function Home() {
                 <div className="space-y-4">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="flex items-center space-x-4 p-2">
-                      <Skeleton className="h-6 w-6 rounded-sm" />
-                      <Skeleton className="h-6 flex-1" />
+                      <Skeleton className="h-6 w-6 rounded-sm bg-slate-300/50" />
+                      <Skeleton className="h-6 flex-1 bg-slate-300/50" />
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="space-y-4">
                   {searchResults.map((paper) => (
-                    <div key={paper.id} className="flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-muted">
+                    <div key={paper.id} className="flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-primary/10">
                       <Checkbox
                         id={paper.id}
                         checked={selectedPapers.has(paper.id)}
@@ -230,7 +236,7 @@ export default function Home() {
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 bg-slate-50 p-4 rounded-b-2xl border-t">
+            <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 bg-slate-50/50 p-4 rounded-b-2xl border-t">
               {!isSearching && searchResults.length > 0 && (
                 <Button onClick={handleSelectAll} variant="secondary" className="w-full sm:w-auto rounded-lg">
                   <CheckSquare className="mr-2" />
@@ -251,7 +257,7 @@ export default function Home() {
           </Card>
         )}
       </main>
-       <footer className="w-full py-6">
+       <footer className="w-full py-6 z-10">
         <div className="container mx-auto max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 px-4 text-center md:text-left">
           <div className="flex items-center gap-4">
               <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
@@ -265,7 +271,7 @@ export default function Home() {
               </a>
           </div>
           <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" className="rounded-lg">
+            <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
               <Mail className="mr-2 h-4 w-4"/>
               Give Feedback
             </Button>

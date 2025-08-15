@@ -257,6 +257,18 @@ export default function Home() {
           </Card>
         )}
       </main>
+
+      {/* Floating Action Button for 'Buy me a coffee' - Mobile Only */}
+      <a 
+        href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="md:hidden fixed bottom-6 right-6 z-20 h-14 w-14 bg-primary rounded-full shadow-lg flex items-center justify-center text-white"
+        aria-label="Buy me a coffee"
+      >
+        <Coffee className="h-6 w-6"/>
+      </a>
+      
        <footer className="w-full py-6 z-10">
         <div className="container mx-auto max-w-4xl flex flex-col items-center gap-4 px-4 text-center">
             <div className="flex items-center gap-4">
@@ -277,7 +289,8 @@ export default function Home() {
                   Give Feedback
                 </Button>
               </a>
-              <a href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" target="_blank" rel="noopener noreferrer">
+              {/* 'Buy me a coffee' button - Desktop Only */}
+              <a href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" target="_blank" rel="noopener noreferrer" className="hidden md:inline-block">
                 <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm w-full sm:w-auto">
                   <Coffee className="mr-2 h-4 w-4"/>
                   Buy me a coffee

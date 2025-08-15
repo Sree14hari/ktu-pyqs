@@ -270,7 +270,7 @@ export default function Home() {
                   <Instagram className="h-6 w-6" />
               </a>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex items-center gap-4">
             <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm">
                 <Mail className="mr-2 h-4 w-4"/>
@@ -292,5 +292,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     

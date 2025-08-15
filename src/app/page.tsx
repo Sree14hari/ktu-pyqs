@@ -117,7 +117,7 @@ export default function Home() {
     a.href = generatedPdfUrl;
     a.download = `${subjectCode.toUpperCase()}_PYQs_merged.pdf`;
     document.body.appendChild(a);
-a.click();
+    a.click();
     document.body.removeChild(a);
   };
 

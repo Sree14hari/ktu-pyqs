@@ -213,7 +213,7 @@ export default function Home() {
               )}
                <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0} className="w-full sm:w-auto rounded-lg">
                 {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
-                {isGenerating ? 'Generating...' : `Generate PDF (${selectedPapers.size})`}
+                {isGenerating ? `Generating PDF... (${selectedPapers.size} papers)` : `Generate PDF (${selectedPapers.size})`}
               </Button>
               {generatedPdfUrl && (
                  <Button onClick={handleDownload} variant="outline" className="w-full sm:w-auto rounded-lg">

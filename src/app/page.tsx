@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
 import { QuestionPaper, findPapersBySubject, fetchPdfAsDataUri } from '@/lib/mock-data';
-import { mergePdfs, dataUriToUint8Array } from '@/lib/pdf-utils';
+import { dataUriToUint8Array } from '@/lib/pdf-utils';
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from '@/components/ui/button';
@@ -76,15 +76,9 @@ export default function Home() {
       const paperDataUris = await Promise.all(
         papersToMerge.map(paper => fetchPdfAsDataUri(paper.pdfUrl))
       );
-
-      const orientedPdfUrisPromises = paperDataUris.map(pdfDataUri => 
-        orientQuestionPaperPages({ pdfDataUri })
-      );
       
-      const orientedResults = await Promise.all(orientedPdfUrisPromises);
-      const orientedPdfUris = orientedResults.map(r => r.orientedPdfDataUri);
-
-      const mergedPdfUri = await mergePdfs(orientedPdfUris);
+      const result = await orientQuestionPaperPages({ pdfDataUris: paperDataUris });
+      const mergedPdfUri = result.mergedPdfDataUri;
       
       const blob = new Blob([dataUriToUint8Array(mergedPdfUri)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
@@ -113,7 +107,7 @@ export default function Home() {
     a.href = generatedPdfUrl;
     a.download = `${subjectCode.toUpperCase()}_PYQs_merged.pdf`;
     document.body.appendChild(a);
-a.click();
+    a.click();
     document.body.removeChild(a);
   };
 

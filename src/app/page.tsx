@@ -14,7 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BookOpen, Search, Download, FileText, Loader2, AlertCircle, CheckSquare } from 'lucide-react';
+import { BookOpen, Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
 export default function Home() {
   const [subjectCode, setSubjectCode] = useState('');
@@ -124,8 +124,8 @@ export default function Home() {
   const allSelected = searchResults.length > 0 && selectedPapers.size === searchResults.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
-      <main className="container mx-auto max-w-4xl p-4 md:p-8">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
+      <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8">
         <header className="flex flex-col items-center justify-center text-center py-6">
           <BookOpen className="h-16 w-16 text-primary mb-3" />
           <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
@@ -225,6 +225,30 @@ export default function Home() {
           </Card>
         )}
       </main>
+       <footer className="w-full py-6">
+        <div className="container mx-auto max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 px-4">
+          <div className="flex items-center gap-4">
+              <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Github className="h-6 w-6" />
+              </a>
+              <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Linkedin className="h-6 w-6" />
+              </a>
+              <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Instagram className="h-6 w-6" />
+              </a>
+          </div>
+          <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" className="rounded-lg">
+              <Mail className="mr-2 h-4 w-4"/>
+              Give Feedback
+            </Button>
+          </a>
+          <p className="text-sm text-muted-foreground">
+            Built with ❤️ by Sreehari
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

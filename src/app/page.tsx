@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
-import { QuestionPaper, findPapersBySubject } from '@/lib/mock-data';
+import { QuestionPaper, findPapersBySubject, fetchPdfAsDataUri } from '@/lib/mock-data';
 import { mergePdfs, dataUriToUint8Array } from '@/lib/pdf-utils';
 import { useToast } from "@/hooks/use-toast";
 
@@ -73,16 +73,9 @@ export default function Home() {
     try {
       const papersToMerge = searchResults.filter(p => selectedPapers.has(p.id));
       
-      const paperDataUris = await Promise.all(papersToMerge.map(async (paper) => {
-        const response = await fetch(paper.pdfUrl);
-        const blob = await response.blob();
-        return new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-      }));
+      const paperDataUris = await Promise.all(
+        papersToMerge.map(paper => fetchPdfAsDataUri(paper.pdfUrl))
+      );
 
       const orientedPdfUrisPromises = paperDataUris.map(pdfDataUri => 
         orientQuestionPaperPages({ pdfDataUri })
@@ -120,7 +113,7 @@ export default function Home() {
     a.href = generatedPdfUrl;
     a.download = `${subjectCode.toUpperCase()}_PYQs_merged.pdf`;
     document.body.appendChild(a);
-    a.click();
+a.click();
     document.body.removeChild(a);
   };
 

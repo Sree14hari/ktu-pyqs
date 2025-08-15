@@ -65,3 +65,14 @@ export async function findPapersBySubject(subjectCode: string): Promise<Question
     return [];
   }
 }
+
+export async function fetchPdfAsDataUri(url: string): Promise<string> {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch PDF from ${url}: ${response.statusText}`);
+    }
+    const blob = await response.blob();
+    const buffer = await blob.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString('base64');
+    return `data:application/pdf;base64,${base64}`;
+}

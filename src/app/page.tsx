@@ -14,7 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BookOpen, Search, Download, FileText, Loader2, AlertCircle } from 'lucide-react';
+import { BookOpen, Search, Download, FileText, Loader2, AlertCircle, CheckSquare } from 'lucide-react';
 
 export default function Home() {
   const [subjectCode, setSubjectCode] = useState('');
@@ -58,6 +58,18 @@ export default function Home() {
       newSelection.delete(paperId);
     }
     setSelectedPapers(newSelection);
+    setGeneratedPdfUrl(null);
+  };
+
+  const handleSelectAll = () => {
+    if (selectedPapers.size === searchResults.length) {
+      // Deselect all
+      setSelectedPapers(new Set());
+    } else {
+      // Select all
+      const allPaperIds = new Set(searchResults.map(p => p.id));
+      setSelectedPapers(allPaperIds);
+    }
     setGeneratedPdfUrl(null);
   };
 
@@ -105,9 +117,11 @@ export default function Home() {
     a.href = generatedPdfUrl;
     a.download = `${subjectCode.toUpperCase()}_PYQs_merged.pdf`;
     document.body.appendChild(a);
-    a.click();
+a.click();
     document.body.removeChild(a);
   };
+
+  const allSelected = searchResults.length > 0 && selectedPapers.size === searchResults.length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
@@ -191,6 +205,12 @@ export default function Home() {
               )}
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row justify-end gap-4 bg-slate-50 p-4 rounded-b-2xl border-t">
+              {!isSearching && searchResults.length > 0 && (
+                <Button onClick={handleSelectAll} variant="secondary" className="rounded-lg">
+                  <CheckSquare className="mr-2" />
+                  {allSelected ? 'Deselect All' : 'Select All'}
+                </Button>
+              )}
                <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0} className="rounded-lg">
                 {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
                 {isGenerating ? 'Generating PDF...' : `Generate PDF (${selectedPapers.size} selected)`}

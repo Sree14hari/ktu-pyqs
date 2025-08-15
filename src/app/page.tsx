@@ -126,10 +126,10 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-body text-foreground">
       <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8">
-        <header className="flex flex-col items-center justify-center text-center py-6">
-          <BookOpen className="h-16 w-16 text-primary mb-3" />
-          <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
-          <p className="mt-2 text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
+        <header className="flex flex-col items-center justify-center text-center py-6 md:py-8">
+          <BookOpen className="h-12 w-12 md:h-16 md:w-16 text-primary mb-3" />
+          <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
+          <p className="mt-2 text-md md:text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
         </header>
 
         {error && (
@@ -142,11 +142,11 @@ export default function Home() {
 
         <Card className="w-full shadow-lg rounded-2xl border-2 border-transparent hover:border-primary/20 transition-all duration-300">
           <CardHeader className="pt-4 pb-2">
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Search className="h-6 w-6 text-primary" />
+            <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
+              <Search className="h-5 w-5 md:h-6 md:w-6 text-primary" />
               Find Question Papers
             </CardTitle>
-            <CardDescription>Enter a subject code to begin your search (e.g., CS301, MA201).</CardDescription>
+            <CardDescription className="text-sm md:text-base">Enter a subject code to begin (e.g., CS301, MA201).</CardDescription>
           </CardHeader>
           <CardContent className="p-4">
             <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
@@ -155,10 +155,10 @@ export default function Home() {
                 placeholder="Enter Subject Code"
                 value={subjectCode}
                 onChange={(e) => setSubjectCode(e.target.value.toUpperCase())}
-                className="text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all"
+                className="text-base md:text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all"
                 aria-label="Subject Code"
               />
-              <Button type="submit" disabled={isSearching || !subjectCode} className="h-12 rounded-lg text-lg bg-primary/90 hover:bg-primary transition-all">
+              <Button type="submit" disabled={isSearching || !subjectCode} className="h-12 w-full sm:w-auto rounded-lg text-base md:text-lg bg-primary/90 hover:bg-primary transition-all">
                 {isSearching ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2" />}
                 {isSearching ? 'Searching...' : 'Search'}
               </Button>
@@ -169,11 +169,11 @@ export default function Home() {
         {(isSearching || searchResults.length > 0) && (
           <Card className="mt-8 shadow-lg rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <FileText className="h-6 w-6 text-primary" />
+              <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
+                <FileText className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                 Search Results
               </CardTitle>
-              <CardDescription>Select the papers you want to combine and download.</CardDescription>
+              <CardDescription className="text-sm md:text-base">Select the papers you want to combine and download.</CardDescription>
             </CardHeader>
             <CardContent>
               {isSearching ? (
@@ -196,7 +196,7 @@ export default function Home() {
                         aria-labelledby={`label-${paper.id}`}
                         className="h-5 w-5"
                       />
-                      <Label htmlFor={paper.id} id={`label-${paper.id}`} className="text-base font-normal cursor-pointer flex-grow">
+                      <Label htmlFor={paper.id} id={`label-${paper.id}`} className="text-sm md:text-base font-normal cursor-pointer flex-grow">
                         {paper.subjectCode} - {paper.name}
                       </Label>
                     </div>
@@ -204,19 +204,19 @@ export default function Home() {
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-end gap-4 bg-slate-50 p-4 rounded-b-2xl border-t">
+            <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 bg-slate-50 p-4 rounded-b-2xl border-t">
               {!isSearching && searchResults.length > 0 && (
-                <Button onClick={handleSelectAll} variant="secondary" className="rounded-lg">
+                <Button onClick={handleSelectAll} variant="secondary" className="w-full sm:w-auto rounded-lg">
                   <CheckSquare className="mr-2" />
                   {allSelected ? 'Deselect All' : 'Select All'}
                 </Button>
               )}
-               <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0} className="rounded-lg">
+               <Button onClick={handleGeneratePdf} disabled={isGenerating || selectedPapers.size === 0} className="w-full sm:w-auto rounded-lg">
                 {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
-                {isGenerating ? 'Generating PDF...' : `Generate PDF (${selectedPapers.size} selected)`}
+                {isGenerating ? 'Generating...' : `Generate PDF (${selectedPapers.size})`}
               </Button>
               {generatedPdfUrl && (
-                 <Button onClick={handleDownload} variant="outline" className="rounded-lg">
+                 <Button onClick={handleDownload} variant="outline" className="w-full sm:w-auto rounded-lg">
                   <Download className="mr-2" />
                   Download Merged PDF
                 </Button>
@@ -226,7 +226,7 @@ export default function Home() {
         )}
       </main>
        <footer className="w-full py-6">
-        <div className="container mx-auto max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 px-4">
+        <div className="container mx-auto max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 px-4 text-center md:text-left">
           <div className="flex items-center gap-4">
               <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <Github className="h-6 w-6" />
@@ -251,4 +251,4 @@ export default function Home() {
       </footer>
     </div>
   );
-}
+ 

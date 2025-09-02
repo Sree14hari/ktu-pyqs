@@ -1,3 +1,4 @@
+
 'use server';
 
 import * as cheerio from 'cheerio';
@@ -11,6 +12,16 @@ export interface QuestionPaper {
 }
 
 const BASE_URL = "http://202.88.225.92";
+
+export async function checkServerStatus(): Promise<boolean> {
+  try {
+    const response = await fetch(BASE_URL, { method: 'HEAD', cache: 'no-store' });
+    return response.ok;
+  } catch (error) {
+    console.error("Server status check failed:", error);
+    return false;
+  }
+}
 
 async function getPdfLink(detailUrl: string): Promise<string | null> {
   try {

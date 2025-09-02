@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
-import { QuestionPaper, findPapersBySubject } from '@/lib/mock-data';
+import { QuestionPaper, findPapersBySubject, checkServerStatus } from '@/lib/mock-data';
 import { dataUriToUint8Array } from '@/lib/pdf-utils';
 import { useToast } from "@/hooks/use-toast";
 
@@ -37,6 +37,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
+  const [serverStatus, setServerStatus] = useState<'checking' | 'up' | 'down'>('checking');
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -50,6 +51,14 @@ export default function Home() {
     }
     return () => clearInterval(interval);
   }, [isGenerating]);
+
+  useEffect(() => {
+    const fetchServerStatus = async () => {
+        const isUp = await checkServerStatus();
+        setServerStatus(isUp ? 'up' : 'down');
+    };
+    fetchServerStatus();
+  }, []);
 
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -162,6 +171,15 @@ export default function Home() {
           <div className="font-logo text-6xl font-bold text-primary mb-3">SHR</div>
           <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
           <p className="mt-2 text-md md:text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
+           <div className="mt-4 flex items-center gap-2 text-sm">
+                <span className="relative flex h-3 w-3">
+                    {serverStatus === 'up' && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>}
+                    <span className={`relative inline-flex rounded-full h-3 w-3 ${serverStatus === 'up' ? 'bg-green-500' : serverStatus === 'down' ? 'bg-red-500' : 'bg-yellow-500'}`}></span>
+                </span>
+                <span>
+                    {serverStatus === 'up' ? 'Server is Online' : serverStatus === 'down' ? 'Server is Offline' : 'Checking Server Status...'}
+                </span>
+            </div>
         </header>
 
         {error && (
@@ -189,8 +207,9 @@ export default function Home() {
                 onChange={(e) => setSubjectCode(e.target.value.toUpperCase())}
                 className="text-base md:text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all bg-white/70"
                 aria-label="Subject Code"
+                disabled={serverStatus !== 'up'}
               />
-              <Button type="submit" disabled={isSearching || !subjectCode} className="h-12 w-full sm:w-auto rounded-lg text-base md:text-lg bg-primary/90 hover:bg-primary transition-all">
+              <Button type="submit" disabled={isSearching || !subjectCode || serverStatus !== 'up'} className="h-12 w-full sm:w-auto rounded-lg text-base md:text-lg bg-primary/90 hover:bg-primary transition-all">
                 {isSearching ? <Loader2 className="animate-spin mr-2" /> : <Search className="mr-2" />}
                 {isSearching ? 'Searching...' : 'Search'}
               </Button>

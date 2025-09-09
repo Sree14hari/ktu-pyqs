@@ -372,7 +372,7 @@ export default function Home() {
               </a>
             </div>
             <p className="text-sm text-muted-foreground">
-              Built with ❤️ by Sreehari — sreehari14shr@gmail.com
+              Built with ❤️ by Sreehari R
             </p>
         </div>
       </footer>

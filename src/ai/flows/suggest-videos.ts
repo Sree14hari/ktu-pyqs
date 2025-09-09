@@ -22,10 +22,6 @@ const VideoSuggestionSchema = z.object({
   searchQuery: z
     .string()
     .describe('A good YouTube search query to find this video or similar ones.'),
-  videoId: z
-    .string()
-    .optional()
-    .describe('The YouTube video ID. Only provide this if you are highly confident you can find a relevant video ID.'),
 });
 
 const SuggestVideosOutputSchema = z.object({
@@ -46,10 +42,7 @@ const suggestVideosFlow = ai.defineFlow(
     
     Suggest 5 relevant YouTube videos. For each video, provide:
     1. A clear title.
-    2. A concise, effective YouTube search query.
-    3. If you are very confident you can find a specific, highly relevant video, provide its YouTube videoId. If not, omit the videoId.
-    
-    Do not make up videoIds.`;
+    2. A concise, effective YouTube search query to find relevant videos.`;
 
     const { output } = await ai.generate({
       prompt,

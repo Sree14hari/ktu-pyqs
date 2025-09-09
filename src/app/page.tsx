@@ -183,7 +183,7 @@ export default function Home() {
       </div>
       <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8 z-10">
         <header className="flex flex-col items-center justify-center text-center py-6 md:py-8">
-          <div className="font-logo-display text-7xl font-bold text-primary mb-2" style={{fontFamily: "'Dancing Script', cursive"}}>Shr.</div>
+          <div className="font-logo text-7xl font-bold text-primary mb-2">Shr.</div>
           <p className="mt-2 text-md md:text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
            <div className="mt-4 flex items-center gap-2 text-sm">
                 <span className="relative flex h-3 w-3">

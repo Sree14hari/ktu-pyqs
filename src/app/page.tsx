@@ -174,7 +174,7 @@ export default function Home() {
   const allSelected = searchResults.length > 0 && selectedPapers.size === searchResults.length;
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-background font-body text-foreground overflow-hidden">
+    <div className="dark relative flex flex-col min-h-screen bg-background font-body text-foreground overflow-hidden">
        <div className="animated-bg">
         <div className="shape shape1"></div>
         <div className="shape shape2"></div>

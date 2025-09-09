@@ -305,29 +305,42 @@ export default function Home() {
             <CardContent>
               {isFetchingVideos ? (
                 <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="flex items-center space-x-4 p-2">
-                      <Skeleton className="h-10 w-10 rounded-md bg-slate-300/50" />
-                      <div className="flex-1 space-y-2">
+                  {[...Array(2)].map((_, i) => (
+                     <div key={i} className="space-y-2">
                         <Skeleton className="h-4 w-3/4 bg-slate-300/50" />
-                        <Skeleton className="h-4 w-1/2 bg-slate-300/50" />
-                      </div>
+                        <Skeleton className="aspect-video w-full bg-slate-300/50" />
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-6">
                   {videoSuggestions?.videos.map((video, index) => (
-                    <a
-                      key={index}
-                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent(video.searchQuery)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 -mx-3 rounded-lg transition-colors hover:bg-primary/10"
-                    >
-                      <Youtube className="h-5 w-5 text-red-500 flex-shrink-0" />
-                      <span className="text-sm md:text-base font-medium text-foreground">{video.title}</span>
-                    </a>
+                    <div key={index} className="space-y-2">
+                       <h3 className="text-sm md:text-base font-medium text-foreground">{video.title}</h3>
+                      {video.videoId ? (
+                        <div className="aspect-video overflow-hidden rounded-lg border">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src={`https://www.youtube.com/embed/${video.videoId}`}
+                            title={video.title}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        </div>
+                      ) : (
+                         <a
+                          href={`https://www.youtube.com/results?search_query=${encodeURIComponent(video.searchQuery)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 p-3 -mx-3 rounded-lg transition-colors hover:bg-primary/10 bg-slate-100/80"
+                        >
+                          <Youtube className="h-5 w-5 text-red-500 flex-shrink-0" />
+                          <span className="text-sm font-medium text-foreground">Search on YouTube: "{video.searchQuery}"</span>
+                        </a>
+                      )}
+                    </div>
                   ))}
                 </div>
               )}

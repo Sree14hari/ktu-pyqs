@@ -183,8 +183,7 @@ export default function Home() {
       </div>
       <main className="flex-grow container mx-auto max-w-4xl p-4 md:p-8 z-10">
         <header className="flex flex-col items-center justify-center text-center py-6 md:py-8">
-          <div className="font-logo text-6xl font-bold text-primary mb-3">SHR</div>
-          <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight">PYQ Access</h1>
+          <div className="font-logo-display text-7xl font-bold text-primary mb-2" style={{fontFamily: "'Dancing Script', cursive"}}>Shr.</div>
           <p className="mt-2 text-md md:text-lg text-muted-foreground font-medium">Your one-stop solution for KTU question papers.</p>
            <div className="mt-4 flex items-center gap-2 text-sm">
                 <span className="relative flex h-3 w-3">
@@ -198,14 +197,14 @@ export default function Home() {
         </header>
 
         {error && (
-          <Alert variant="destructive" className="mb-6 bg-red-50/80 border-red-200 backdrop-blur-sm">
-            <AlertCircle className="h-4 w-4 text-red-600" />
-            <AlertTitle className="text-red-800">Error</AlertTitle>
-            <AlertDescription className="text-red-700">{error}</AlertDescription>
+          <Alert variant="destructive" className="mb-6 bg-red-900/30 border-red-700/50 backdrop-blur-sm">
+            <AlertCircle className="h-4 w-4 text-red-400" />
+            <AlertTitle className="text-red-300">Error</AlertTitle>
+            <AlertDescription className="text-red-400">{error}</AlertDescription>
           </Alert>
         )}
 
-        <Card className="w-full shadow-lg rounded-2xl border-2 border-transparent hover:border-primary/20 transition-all duration-300 bg-white/50 backdrop-blur-md">
+        <Card className="w-full shadow-lg rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md">
           <CardHeader className="pt-4 pb-2">
             <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
               <Search className="h-5 w-5 md:h-6 md:w-6 text-primary" />
@@ -220,7 +219,7 @@ export default function Home() {
                 placeholder="Enter Subject Code"
                 value={subjectCode}
                 onChange={(e) => setSubjectCode(e.target.value.toUpperCase())}
-                className="text-base md:text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all bg-white/70"
+                className="text-base md:text-lg h-12 rounded-lg shadow-inner focus:ring-2 focus:ring-primary/80 transition-all bg-white/5 border-white/10"
                 aria-label="Subject Code"
                 disabled={serverStatus !== 'up'}
               />
@@ -233,7 +232,7 @@ export default function Home() {
         </Card>
 
         {(isSearching || searchResults.length > 0) && (
-          <Card className="mt-8 shadow-lg rounded-2xl bg-white/50 backdrop-blur-md">
+          <Card className="mt-8 shadow-lg rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
                 <FileText className="h-5 w-5 md:h-6 md:w-6 text-primary" />
@@ -246,8 +245,8 @@ export default function Home() {
                 <div className="space-y-4">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="flex items-center space-x-4 p-2">
-                      <Skeleton className="h-6 w-6 rounded-sm bg-slate-300/50" />
-                      <Skeleton className="h-6 flex-1 bg-slate-300/50" />
+                      <Skeleton className="h-6 w-6 rounded-sm bg-slate-700/50" />
+                      <Skeleton className="h-6 flex-1 bg-slate-700/50" />
                     </div>
                   ))}
                 </div>
@@ -270,7 +269,7 @@ export default function Home() {
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 bg-slate-50/50 p-4 rounded-b-2xl border-t">
+            <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 bg-black/20 p-4 rounded-b-2xl border-t border-white/10">
               {!isSearching && searchResults.length > 0 && (
                 <Button onClick={handleSelectAll} variant="secondary" className="w-full sm:w-auto rounded-lg">
                   <CheckSquare className="mr-2" />
@@ -292,7 +291,7 @@ export default function Home() {
         )}
 
         {(isFetchingVideos || videoSuggestions) && (
-          <Card className="mt-8 shadow-lg rounded-2xl bg-white/50 backdrop-blur-md">
+          <Card className="mt-8 shadow-lg rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
                 <Youtube className="h-6 w-6 text-red-600" />
@@ -306,7 +305,7 @@ export default function Home() {
               {isFetchingVideos ? (
                 <div className="space-y-4">
                   {[...Array(3)].map((_, i) => (
-                    <Skeleton key={i} className="h-10 w-full bg-slate-300/50" />
+                    <Skeleton key={i} className="h-10 w-full bg-slate-700/50" />
                   ))}
                 </div>
               ) : (
@@ -317,7 +316,7 @@ export default function Home() {
                       href={`https://www.youtube.com/results?search_query=${encodeURIComponent(video.searchQuery)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 -mx-3 rounded-lg transition-colors hover:bg-primary/10 bg-slate-100/80"
+                      className="flex items-center gap-3 p-3 -mx-3 rounded-lg transition-colors hover:bg-primary/10 bg-black/20"
                     >
                       <Youtube className="h-5 w-5 text-red-500 flex-shrink-0" />
                       <div>
@@ -359,21 +358,21 @@ export default function Home() {
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <a href="https://wa.me/message/EZFVK5ZJU5GKA1?src=qr" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm w-full sm:w-auto">
+                <Button variant="outline" className="rounded-lg bg-white/5 backdrop-blur-sm w-full sm:w-auto">
                   <Mail className="mr-2 h-4 w-4"/>
                   Give Feedback
                 </Button>
               </a>
               {/* 'Buy me a coffee' button - Desktop Only */}
               <a href="upi://pay?pa=sreehari14shr@oksbi&pn=SREEHARI&aid=uGICAgMCOgPK9OA" target="_blank" rel="noopener noreferrer" className="hidden md:inline-block">
-                <Button variant="outline" className="rounded-lg bg-white/50 backdrop-blur-sm w-full sm:w-auto">
+                <Button variant="outline" className="rounded-lg bg-white/5 backdrop-blur-sm w-full sm:w-auto">
                   <Coffee className="mr-2 h-4 w-4"/>
                   Buy me a coffee
                 </Button>
               </a>
             </div>
             <p className="text-sm text-muted-foreground">
-              Built with ❤️ by Sreehari
+              Built with ❤️ by Sreehari — sreehari14shr@gmail.com
             </p>
         </div>
       </footer>

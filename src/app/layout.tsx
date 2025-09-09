@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 export const metadata: Metadata = {
   title: 'PYQ Access',
   description: 'Easy access to past year question papers for KTU students.',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({

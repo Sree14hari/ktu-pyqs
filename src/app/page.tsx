@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { orientQuestionPaperPages } from '@/ai/flows/orient-pages';
+import { suggestVideos, SuggestVideosOutput } from '@/ai/flows/suggest-videos';
 import { QuestionPaper, findPapersBySubject, checkServerStatus } from '@/lib/mock-data';
 import { dataUriToUint8Array } from '@/lib/pdf-utils';
 import { useToast } from "@/hooks/use-toast";
@@ -14,7 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail, Coffee } from 'lucide-react';
+import { Search, Download, FileText, Loader2, AlertCircle, CheckSquare, Github, Linkedin, Instagram, Mail, Coffee, Youtube } from 'lucide-react';
 
 const loadingMessages = [
   "Initializing process...",
@@ -38,6 +39,8 @@ export default function Home() {
   const { toast } = useToast();
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
   const [serverStatus, setServerStatus] = useState<'checking' | 'up' | 'down'>('checking');
+  const [videoSuggestions, setVideoSuggestions] = useState<SuggestVideosOutput | null>(null);
+  const [isFetchingVideos, setIsFetchingVideos] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -70,13 +73,25 @@ export default function Home() {
     setGeneratedPdfUrl(null);
     setSelectedPapers(new Set());
     setSearchResults([]);
+    setVideoSuggestions(null);
+    setIsFetchingVideos(false);
 
     try {
       const results = await findPapersBySubject(subjectCode);
       if (results.length === 0) {
         setError(`No question papers found for subject code "${subjectCode}".`);
+      } else {
+        setSearchResults(results);
+        setIsFetchingVideos(true);
+        // Don't wait for video suggestions to show paper results
+        suggestVideos({ courseName: `${subjectCode} - ${results[0].name}` })
+          .then(setVideoSuggestions)
+          .catch(err => {
+              console.error("Failed to fetch video suggestions", err);
+              // Silently fail or show a small error notice for videos
+          })
+          .finally(() => setIsFetchingVideos(false));
       }
-      setSearchResults(results);
     } catch (err) {
       setError("Failed to fetch question papers. The source might be down or the subject code is incorrect.");
       console.error(err);
@@ -273,6 +288,50 @@ export default function Home() {
                 </Button>
               )}
             </CardFooter>
+          </Card>
+        )}
+
+        {(isFetchingVideos || videoSuggestions) && (
+          <Card className="mt-8 shadow-lg rounded-2xl bg-white/50 backdrop-blur-md">
+            <CardHeader>
+              <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
+                <Youtube className="h-6 w-6 text-red-600" />
+                Video Suggestions
+              </CardTitle>
+              <CardDescription className="text-sm md:text-base">
+                Here are some YouTube videos that might help you with this subject.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isFetchingVideos ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="flex items-center space-x-4 p-2">
+                      <Skeleton className="h-10 w-10 rounded-md bg-slate-300/50" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-4 w-3/4 bg-slate-300/50" />
+                        <Skeleton className="h-4 w-1/2 bg-slate-300/50" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {videoSuggestions?.videos.map((video, index) => (
+                    <a
+                      key={index}
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent(video.searchQuery)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-3 -mx-3 rounded-lg transition-colors hover:bg-primary/10"
+                    >
+                      <Youtube className="h-5 w-5 text-red-500 flex-shrink-0" />
+                      <span className="text-sm md:text-base font-medium text-foreground">{video.title}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </CardContent>
           </Card>
         )}
       </main>

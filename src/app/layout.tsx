@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'PYQ Access',
   description: 'Easy access to past year question papers for KTU students.',
   manifest: '/manifest.json',
+  verification: {
+    google: 'UxZm8TRlYXQwnN3FSNL8_YWDoyHx-UwmSqfQSN9fD_s',
+  },
 };
 
 export default function RootLayout({

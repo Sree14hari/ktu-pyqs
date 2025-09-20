@@ -1,4 +1,4 @@
-# 📚 KTU PYQs Access
+s# 📚 KTU PYQs Access
 
 A simple and fast platform to access **APJ Abdul Kalam Technological University (KTU) Previous Year Question Papers (PYQs)**.
 This project helps students easily find and download question papers without relying on multiple broken sources.

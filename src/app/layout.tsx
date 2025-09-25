@@ -4,8 +4,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
-  title: 'PYQ Access',
-  description: 'Easy access to past year question papers for KTU students.',
+  title: 'KTU PYQ Finder - Previous Year Question Papers',
+  description: 'Easily find, browse, and download APJ Abdul Kalam Technological University (KTU) previous year question papers (PYQs) for all branches and semesters.',
+  keywords: 'KTU, APJ Abdul Kalam Technological University, PYQ, Question Papers, Previous Year Questions, KTU PYQ Finder, Engineering, B.Tech',
   manifest: '/manifest.json',
   verification: {
     google: 'UxZm8TRlYXQwnN3FSNL8_YWDoyHx-UwmSqfQSN9fD_s',

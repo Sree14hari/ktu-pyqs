@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Github, Instagram, Linkedin, Menu } from "lucide-react";
-import { ThemeSwitch } from "../ui/theme-switch";
 
 export default function AppNavbar({ className }: { className?: string }) {
   const pathname = usePathname();
@@ -68,7 +67,6 @@ export default function AppNavbar({ className }: { className?: string }) {
         </nav>
         
         <div className="hidden md:flex items-center gap-4">
-            <ThemeSwitch />
         </div>
 
         <div className="md:hidden">
@@ -106,7 +104,6 @@ export default function AppNavbar({ className }: { className?: string }) {
                   ))}
                 </nav>
                 <div className="mt-auto flex flex-col items-center gap-6">
-                  <ThemeSwitch />
                   <div className="flex items-center gap-6">
                     <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                         <Github className="h-6 w-6" />
@@ -127,5 +124,3 @@ export default function AppNavbar({ className }: { className?: string }) {
     </div>
   );
 }
-
-    

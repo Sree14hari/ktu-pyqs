@@ -6,7 +6,6 @@ import { Analytics } from '@vercel/analytics/react';
 import Script from 'next/script';
 import ClarityClient from "@/app/component/clarity-client";
 import AppNavbar from '@/components/layout/navbar';
-import { ThemeProvider } from '@/components/theme-provider';
 
 
 export const metadata: Metadata = {
@@ -65,12 +64,6 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-body antialiased h-full">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
           <div className="relative w-full flex flex-col items-center z-20">
               <AppNavbar />
           </div>
@@ -91,7 +84,6 @@ export default function RootLayout({
             data-y_margin="18"
             strategy="lazyOnload"
           ></Script>
-        </ThemeProvider>
       </body>
     </html>
   );

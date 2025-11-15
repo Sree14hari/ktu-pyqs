@@ -22,16 +22,8 @@ async function getGridConfiguration(pageCount: number, maxOutputPages: number) {
             return layout;
         }
     }
-
-    // Fallback to the layout that produces the fewest pages if the target isn't met
-    // This happens if pageCount is very large, e.g., > 60 for max 5 pages.
-    const smallestOutputPages = Math.ceil(pageCount / layouts[0].pagesPerSheet);
-    if (smallestOutputPages > maxOutputPages) {
-        // If even the densest layout exceeds max pages, inform the user via an error
-        throw new Error(`Cannot compress to ${maxOutputPages} pages. The minimum possible is ${smallestOutputPages}. Try increasing the max page limit.`);
-    }
     
-    // As a final fallback, use the densest layout.
+    // If no layout meets the maxOutputPages criteria, just return the densest one.
     return layouts[0];
 }
 

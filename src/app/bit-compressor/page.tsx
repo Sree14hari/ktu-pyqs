@@ -17,7 +17,6 @@ export default function BitCompressorPage() {
   const [isCompressing, setIsCompressing] = useState(false);
   const [compressedUrl, setCompressedUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
   const [maxPages, setMaxPages] = useState<number>(5);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +76,6 @@ export default function BitCompressorPage() {
     setIsCompressing(true);
     setError(null);
     setCompressedUrl(null);
-    setProgress(0);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -113,7 +111,6 @@ export default function BitCompressorPage() {
       });
     } finally {
       setIsCompressing(false);
-      setProgress(100);
     }
   };
   
@@ -189,7 +186,7 @@ export default function BitCompressorPage() {
 
           {isCompressing && (
              <div className="w-full">
-                <Progress value={progress} className="w-full h-2" />
+                <Progress value={100} className="w-full h-2 animate-pulse" />
                 <p className="text-sm text-center mt-2 text-muted-foreground">Compressing, please wait...</p>
              </div>
           )}

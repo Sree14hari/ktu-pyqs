@@ -1,12 +1,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 
 async function getGridConfiguration(pageCount: number, maxOutputPages: number) {
-    // Aim for a total of `maxOutputPages` maximum in the output PDF
     if (maxOutputPages < 1) maxOutputPages = 1;
 
-    // Test layouts from biggest to smallest
     const layouts = [
         { cols: 3, rows: 4, pagesPerSheet: 12 },
         { cols: 3, rows: 3, pagesPerSheet: 9 },
@@ -23,8 +21,9 @@ async function getGridConfiguration(pageCount: number, maxOutputPages: number) {
         }
     }
     
-    // If no layout meets the maxOutputPages criteria, just return the densest one.
-    return layouts[0];
+    // If no layout is found, it's impossible. Calculate the minimum possible pages.
+    const minPossiblePages = Math.ceil(pageCount / layouts[0].pagesPerSheet);
+    throw new Error(`Cannot compress to ${maxOutputPages} pages. The minimum possible is ${minPossiblePages}. Try increasing the max page limit.`);
 }
 
 
@@ -45,7 +44,7 @@ export async function POST(request: NextRequest) {
     const originalPages = originalPdf.getPages();
     const pageCount = originalPages.length;
 
-    const { cols, rows, pagesPerSheet } = await getGridConfiguration(pageCount, maxPages);
+    const { cols, rows } = await getGridConfiguration(pageCount, maxPages);
 
     const compressedPdf = await PDFDocument.create();
     compressedPdf.setProducer('KTUHUB BIT Compressor');

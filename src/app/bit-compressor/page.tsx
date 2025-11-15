@@ -127,7 +127,7 @@ export default function BitCompressorPage() {
   return (
     <div className="container mx-auto max-w-3xl flex-grow p-4 md:p-8">
       <header className="flex flex-col items-center justify-center text-center py-8 md:py-12">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight">BIT PDF Compressor</h1>
+        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight text-foreground">BIT PDF Compressor</h1>
         <p className="mt-4 text-lg text-muted-foreground">Compress your PDFs into an N-up layout for efficient printing and viewing.</p>
       </header>
 

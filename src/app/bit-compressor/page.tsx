@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Upload, Loader2, FileDown, AlertCircle, FileCheck2, Heart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function BitCompressorPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -17,6 +18,7 @@ export default function BitCompressorPage() {
   const [compressedUrl, setCompressedUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  const [maxPages, setMaxPages] = useState<number>(5);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -79,6 +81,8 @@ export default function BitCompressorPage() {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('maxPages', String(maxPages));
+
 
     try {
         const response = await fetch('/api/compress-pdf', {
@@ -88,7 +92,7 @@ export default function BitCompressorPage() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to compress PDF.');
+            throw new Error(errorData.details || errorData.error || 'Failed to compress PDF.');
         }
 
         const blob = await response.blob();
@@ -143,6 +147,21 @@ export default function BitCompressorPage() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
+
+          <div className="space-y-2">
+            <Label htmlFor="max-pages">Maximum Output Pages</Label>
+            <Select value={String(maxPages)} onValueChange={(value) => setMaxPages(Number(value))}>
+                <SelectTrigger id="max-pages" className="w-full sm:w-[180px]">
+                    <SelectValue placeholder="Select max pages" />
+                </SelectTrigger>
+                <SelectContent>
+                    {[1, 2, 3, 4, 5].map(num => (
+                        <SelectItem key={num} value={String(num)}>{num}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">The tool will try its best to fit the PDF within this page limit.</p>
+          </div>
 
           <Label
             htmlFor="file-upload"

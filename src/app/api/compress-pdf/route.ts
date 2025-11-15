@@ -2,9 +2,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
-async function getGridConfiguration(pageCount: number) {
-    // Aim for a total of 5 pages maximum in the output PDF
-    const maxOutputPages = 5;
+async function getGridConfiguration(pageCount: number, maxOutputPages: number) {
+    // Aim for a total of `maxOutputPages` maximum in the output PDF
+    if (maxOutputPages < 1) maxOutputPages = 1;
 
     // Test layouts from biggest to smallest
     const layouts = [
@@ -23,7 +23,15 @@ async function getGridConfiguration(pageCount: number) {
         }
     }
 
-    // Fallback to the largest grid if the page count is extremely high
+    // Fallback to the layout that produces the fewest pages if the target isn't met
+    // This happens if pageCount is very large, e.g., > 60 for max 5 pages.
+    const smallestOutputPages = Math.ceil(pageCount / layouts[0].pagesPerSheet);
+    if (smallestOutputPages > maxOutputPages) {
+        // If even the densest layout exceeds max pages, inform the user via an error
+        throw new Error(`Cannot compress to ${maxOutputPages} pages. The minimum possible is ${smallestOutputPages}. Try increasing the max page limit.`);
+    }
+    
+    // As a final fallback, use the densest layout.
     return layouts[0];
 }
 
@@ -32,6 +40,9 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
+    const maxPagesStr = formData.get('maxPages') as string | null;
+    const maxPages = maxPagesStr ? parseInt(maxPagesStr, 10) : 5;
+
 
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
@@ -42,7 +53,7 @@ export async function POST(request: NextRequest) {
     const originalPages = originalPdf.getPages();
     const pageCount = originalPages.length;
 
-    const { cols, rows, pagesPerSheet } = await getGridConfiguration(pageCount);
+    const { cols, rows, pagesPerSheet } = await getGridConfiguration(pageCount, maxPages);
 
     const compressedPdf = await PDFDocument.create();
     compressedPdf.setProducer('KTUHUB BIT Compressor');

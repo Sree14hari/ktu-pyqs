@@ -243,7 +243,7 @@ export default function Home() {
 
       <div className="container mx-auto max-w-3xl flex-grow p-4 md:p-8 z-10">
         <header className="flex flex-col items-center justify-center text-center py-8 md:py-12">
-          <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tight">KTUHUB</h1>
+          <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tight text-foreground">KTUHUB</h1>
           <p className="mt-2 text-md md:text-lg text-muted-foreground font-medium">Your one-stop solution for KTU resources.</p>
           <div className="mt-4">
             <button className="relative inline-flex h-8 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">

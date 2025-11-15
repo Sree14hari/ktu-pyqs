@@ -69,10 +69,5 @@ body {
     background-image: url("/noise.png");
     background-size: 300px 300px;
     background-position: 0 0;
-    mix-blend-mode: screen; /* forces PNG to show */
-  }
-
-  .dark body {
-    mix-blend-mode: normal;
   }
 }

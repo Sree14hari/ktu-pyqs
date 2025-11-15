@@ -65,9 +65,10 @@ body {
   }
   body {
     background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
     background-image: url("/noise.png");
     background-size: 300px 300px;
     background-position: 0 0;
+    mix-blend-mode: screen; /* forces PNG to show */
   }
+  
 }

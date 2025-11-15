@@ -48,7 +48,7 @@ export default function AppNavbar({ className }: { className?: string }) {
       <div className="container mx-auto max-w-3xl flex items-center justify-between px-4 h-16">
         <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2">
-                <span className="text-xl font-bold">KTUHUB</span>
+                <span className="text-xl font-bold text-white">KTUHUB</span>
             </Link>
         </div>
 
@@ -96,7 +96,7 @@ export default function AppNavbar({ className }: { className?: string }) {
                 </SheetHeader>
               <div className="flex flex-col h-full p-6">
                 <Link href="/" onClick={handleLinkClick} className="flex items-center gap-2 mb-8">
-                  <span className="text-xl font-bold">KTUHUB</span>
+                  <span className="text-xl font-bold text-white">KTUHUB</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
                   {navItems.map((item) => (

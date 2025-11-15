@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -20,6 +19,10 @@ export default function AppNavbar({ className }: { className?: string }) {
     {
         name: "SGPA",
         link: "/sgpa-calculator",
+    },
+    {
+      name: "Compress",
+      link: "/bit-compressor",
     },
     {
       name: "Notes",

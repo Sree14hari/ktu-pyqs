@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -20,6 +19,10 @@ export default function AppNavbar({ className }: { className?: string }) {
     {
         name: "SGPA",
         link: "/sgpa-calculator",
+    },
+    {
+      name: "Compress",
+      link: "/bit-compressor",
     },
     {
       name: "Notes",
@@ -55,10 +58,10 @@ export default function AppNavbar({ className }: { className?: string }) {
               key={item.name}
               href={item.link}
               className={cn(
-                "transition-colors hover:text-white",
+                "transition-colors hover:text-foreground",
                 pathname === item.link
-                  ? "text-white"
-                  : "text-neutral-400"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
               )}
             >
               {item.name}
@@ -67,13 +70,13 @@ export default function AppNavbar({ className }: { className?: string }) {
         </nav>
         
         <div className="hidden md:flex items-center gap-4">
-            <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Github className="h-5 w-5" />
             </a>
-            <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Linkedin className="h-5 w-5" />
             </a>
-            <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Instagram className="h-5 w-5" />
             </a>
         </div>
@@ -82,7 +85,7 @@ export default function AppNavbar({ className }: { className?: string }) {
            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6 text-white" />
+                <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
@@ -104,24 +107,26 @@ export default function AppNavbar({ className }: { className?: string }) {
                       className={cn(
                         "text-lg",
                         pathname === item.link
-                          ? "text-white font-semibold"
-                          : "text-neutral-400"
+                          ? "text-foreground font-semibold"
+                          : "text-muted-foreground"
                       )}
                     >
                       {item.name}
                     </Link>
                   ))}
                 </nav>
-                <div className="mt-auto flex items-center justify-center gap-6">
-                    <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+                <div className="mt-auto flex flex-col items-center gap-6">
+                  <div className="flex items-center gap-6">
+                    <a href="https://github.com/Sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                         <Github className="h-6 w-6" />
                     </a>
-                    <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+                    <a href="https://www.linkedin.com/in/sree14hari" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                         <Linkedin className="h-6 w-6" />
                     </a>
-                    <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+                    <a href="https://www.instagram.com/s_ree.har_i" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                         <Instagram className="h-6 w-6" />
                     </a>
+                  </div>
                 </div>
               </div>
             </SheetContent>
@@ -131,5 +136,3 @@ export default function AppNavbar({ className }: { className?: string }) {
     </div>
   );
 }
-
-    

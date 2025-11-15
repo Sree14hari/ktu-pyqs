@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en" className="h-full dark">
+    <html lang="en" className="dark h-full" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -64,26 +64,26 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-body antialiased h-full">
-        <div className="relative w-full flex flex-col items-center z-20">
-            <AppNavbar />
-        </div>
-        <main className="pt-16">{children}</main>
-        <Toaster />
-        <Analytics />
-        <ClarityClient />
-        <Script
-          data-name="BMC-Widget"
-          data-cfasync="false"
-          src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-          data-id="sree14hari"
-          data-description="Support me on Buy me a coffee!"
-          data-message=""
-          data-color="#5F7FFF"
-          data-position="Right"
-          data-x_margin="18"
-          data-y_margin="18"
-          strategy="lazyOnload"
-        ></Script>
+          <div className="relative w-full flex flex-col items-center z-20">
+              <AppNavbar />
+          </div>
+          <main className="pt-16">{children}</main>
+          <Toaster />
+          <Analytics />
+          <ClarityClient />
+          <Script
+            data-name="BMC-Widget"
+            data-cfasync="false"
+            src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+            data-id="sree14hari"
+            data-description="Support me on Buy me a coffee!"
+            data-message=""
+            data-color="#5F7FFF"
+            data-position="Right"
+            data-x_margin="18"
+            data-y_margin="18"
+            strategy="lazyOnload"
+          ></Script>
       </body>
     </html>
   );

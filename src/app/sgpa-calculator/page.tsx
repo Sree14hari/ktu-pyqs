@@ -133,7 +133,7 @@ export default function SgpaCalculatorPage() {
   return (
     <div className="container mx-auto max-w-3xl flex-grow p-4 md:p-8">
       <header className="flex flex-col items-center justify-center text-center py-8 md:py-12">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight text-white">SGPA Calculator</h1>
+        <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight">SGPA Calculator</h1>
         <p className="mt-4 text-lg text-muted-foreground">Calculate your semester grade point average based on KTU rules.</p>
       </header>
 
@@ -232,7 +232,7 @@ export default function SgpaCalculatorPage() {
                 <CardTitle className="text-2xl font-bold">Your SGPA</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="text-6xl font-headline font-bold text-primary">{sgpa.toFixed(2)}</p>
+                <p className="text-6xl font-headline font-bold text-primary-foreground dark:text-primary">{sgpa.toFixed(2)}</p>
             </CardContent>
             <CardFooter className="justify-center">
                 <Button onClick={handleDownloadPdf} variant="outline">

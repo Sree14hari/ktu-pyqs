@@ -34,7 +34,7 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
     let watermarkImage;
     try {
         // Assuming the logo is at the root of the public folder
-        const imageUrl = new URL('/noise.png', 'https://ktuhub.vercel.app').toString();
+        const imageUrl = new URL('/shrlogo.png', 'www.ktuhub.site').toString();
         const imageBytes = await fetch(imageUrl).then(res => res.arrayBuffer());
         watermarkImage = await mergedPdf.embedPng(imageBytes);
     } catch(e) {
@@ -79,8 +79,8 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         }
 
         // Footer text
-        const text = 'Generated from KTUHUB';
-        const url = 'https://ktuhub.vercel.app';
+        const text = 'Generated from KTUHUB SHR';
+        const url = 'www.ktuhub.site';
         const fontSize = 10;
         const textWidth = helveticaFont.widthOfTextAtSize(text, fontSize);
         const textHeight = helveticaFont.heightAtSize(fontSize);

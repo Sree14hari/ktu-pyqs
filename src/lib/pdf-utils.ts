@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib';
 
 // Helper to convert data URI to Uint8Array.
 export function dataUriToUint8Array(dataUri: string): Uint8Array {
@@ -27,8 +27,8 @@ function uint8ArrayToBase64(bytes: Uint8Array): string {
 
 export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
     const mergedPdf = await PDFDocument.create();
-    mergedPdf.setCreator('KTU PYQ Finder');
-    mergedPdf.setProducer('KTU PYQ Finder');
+    mergedPdf.setCreator('KTUHUB');
+    mergedPdf.setProducer('KTUHUB');
 
     for (const dataUri of pdfDataUris) {
         try {
@@ -47,24 +47,43 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         }
     }
 
-    // Fetch and embed the watermark image
-    const watermarkImageBytes = await fetch('/shrlogo.png').then(res => res.arrayBuffer());
-    const watermarkImage = await mergedPdf.embedPng(watermarkImageBytes);
-    const watermarkDims = watermarkImage.scale(0.3); // Scale the watermark to 30% of its original size
+    const helveticaFont = await mergedPdf.embedFont(StandardFonts.Helvetica);
 
-
-    // Add watermark to each page
+    // Add footer to each page
     const pages = mergedPdf.getPages();
     for (const page of pages) {
         const { width, height } = page.getSize();
-        
-        page.drawImage(watermarkImage, {
-            x: width / 2 - watermarkDims.width / 2,
-            y: height / 2 - watermarkDims.height / 2,
-            width: watermarkDims.width,
-            height: watermarkDims.height,
-            opacity: 0.15, // Set opacity for watermark effect
+        const text = 'Generated from KTUHUB';
+        const url = 'https://ktuhub.vercel.app';
+        const fontSize = 10;
+        const textWidth = helveticaFont.widthOfTextAtSize(text, fontSize);
+        const textHeight = helveticaFont.heightAtSize(fontSize);
+
+        const x = width / 2 - textWidth / 2;
+        const y = 20;
+
+        page.drawText(text, {
+            x: x,
+            y: y,
+            font: helveticaFont,
+            size: fontSize,
+            color: rgb(0.5, 0.5, 0.5),
         });
+
+        // Add a clickable link annotation
+        page.node.add(
+          page.doc.context.obj({
+            Type: 'Annot',
+            Subtype: 'Link',
+            Rect: [x, y, x + textWidth, y + textHeight],
+            Border: [0, 0, 0], // No visible border
+            A: {
+              Type: 'Action',
+              S: 'URI',
+              URI: mergedPdf.context.obj(url),
+            },
+          }),
+        );
     }
 
     const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });

@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb, PDFFont, PDFHexString } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, PDFFont, PDFHexString, PDFName } from 'pdf-lib';
 
 // Helper to convert data URI to Uint8Array.
 export function dataUriToUint8Array(dataUri: string): Uint8Array {
@@ -71,20 +71,18 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         });
 
         // Add a clickable link annotation
-        page.drawText('', {x, y, size: fontSize}); // Invisible text for the link area
-        
         page.node.set(
-            'Annots',
+            PDFName.of('Annots'),
             mergedPdf.context.obj([
                 {
-                    Type: 'Annot',
-                    Subtype: 'Link',
+                    Type: PDFName.of('Annot'),
+                    Subtype: PDFName.of('Link'),
                     Rect: [x, y, x + textWidth, y + textHeight],
                     Border: [0, 0, 0],
-                    C: [0, 0, 0],
+                    C: [0, 0, 0], // Link color (black)
                     A: {
-                        Type: 'Action',
-                        S: 'URI',
+                        Type: PDFName.of('Action'),
+                        S: PDFName.of('URI'),
                         URI: PDFHexString.fromText(url),
                     },
                 },

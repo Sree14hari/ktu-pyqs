@@ -49,9 +49,6 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
     }
 
     const helveticaFont = await mergedPdf.embedFont(StandardFonts.Helvetica);
-    const watermarkImage = await mergedPdf.embedSvg(ktuhubLogoSvg);
-    const watermarkDims = watermarkImage.scale(0.3);
-
 
     // Add footer and watermark to each page
     const pages = mergedPdf.getPages();
@@ -59,6 +56,8 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         const { width, height } = page.getSize();
         
         // Watermark
+        const watermarkImage = await mergedPdf.embedSvg(ktuhubLogoSvg);
+        const watermarkDims = watermarkImage.scale(0.3);
         page.drawImage(watermarkImage, {
             x: width / 2 - watermarkDims.width / 2,
             y: height / 2 - watermarkDims.height / 2,
@@ -98,13 +97,12 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
             },
         });
         
-        const existingAnnots = page.node.lookup(PDFName.of('Annots'));
-        let annotsArray = [];
-        if (existingAnnots) {
-            annotsArray = existingAnnots.asArray().map(ref => mergedPdf.context.lookup(ref));
+        const annots = page.node.lookup(PDFName.of('Annots'));
+        if (annots) {
+          annots.push(mergedPdf.context.register(linkAnnotation));
+        } else {
+          page.node.set(PDFName.of('Annots'), mergedPdf.context.obj([linkAnnotation]));
         }
-        annotsArray.push(linkAnnotation);
-        page.node.set(PDFName.of('Annots'), mergedPdf.context.obj(annotsArray));
     }
 
     const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });

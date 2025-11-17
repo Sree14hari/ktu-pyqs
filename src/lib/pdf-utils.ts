@@ -70,25 +70,24 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
             color: rgb(0.5, 0.5, 0.5),
         });
 
-        // Add a clickable link annotation
-        page.node.set(
-            PDFName.of('Annots'),
-            mergedPdf.context.obj([
-                {
-                    Type: PDFName.of('Annot'),
-                    Subtype: PDFName.of('Link'),
-                    Rect: [x, y, x + textWidth, y + textHeight],
-                    Border: [0, 0, 0],
-                    C: [0, 0, 0], // Link color (black)
-                    A: {
-                        Type: PDFName.of('Action'),
-                        S: PDFName.of('URI'),
-                        URI: PDFHexString.fromText(url),
-                    },
-                },
-            ])
-        );
+        const linkAnnotation = {
+            Type: 'Annot',
+            Subtype: 'Link',
+            Rect: [x, y, x + textWidth, y + textHeight],
+            Border: [0, 0, 0],
+            A: {
+                Type: 'Action',
+                S: 'URI',
+                URI: PDFHexString.fromText(url),
+            },
+        };
 
+        const annots = page.node.lookup(PDFName.of('Annots'));
+        if (annots) {
+            page.node.set(PDFName.of('Annots'), mergedPdf.context.obj([linkAnnotation, ...annots.asArray()]));
+        } else {
+            page.node.set(PDFName.of('Annots'), mergedPdf.context.obj([linkAnnotation]));
+        }
     }
 
     const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });

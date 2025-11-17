@@ -71,8 +71,7 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         });
 
         // Add a clickable link annotation
-        page.node.add(
-          page.doc.context.obj({
+        const linkAnnotation = mergedPdf.context.obj({
             Type: 'Annot',
             Subtype: 'Link',
             Rect: [x, y, x + textWidth, y + textHeight],
@@ -82,8 +81,14 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
               S: 'URI',
               URI: mergedPdf.context.obj(url),
             },
-          }),
-        );
+        });
+        
+        const annots = page.node.lookup(mergedPdf.context.obj('Annots'), 'Array');
+        if (annots) {
+            annots.push(mergedPdf.context.obj(linkAnnotation));
+        } else {
+            page.node.set(mergedPdf.context.obj('Annots'), mergedPdf.context.obj([linkAnnotation]));
+        }
     }
 
     const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });

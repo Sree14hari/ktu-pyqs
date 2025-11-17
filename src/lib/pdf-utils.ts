@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, PDFFont, PDFHexString } from 'pdf-lib';
 
 // Helper to convert data URI to Uint8Array.
 export function dataUriToUint8Array(dataUri: string): Uint8Array {
@@ -71,24 +71,26 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         });
 
         // Add a clickable link annotation
-        const linkAnnotation = mergedPdf.context.obj({
-            Type: 'Annot',
-            Subtype: 'Link',
-            Rect: [x, y, x + textWidth, y + textHeight],
-            Border: [0, 0, 0], // No visible border
-            A: {
-              Type: 'Action',
-              S: 'URI',
-              URI: mergedPdf.context.obj(url),
-            },
-        });
+        page.drawText('', {x, y, size: fontSize}); // Invisible text for the link area
         
-        const annots = page.node.lookup(mergedPdf.context.obj('Annots'), 'Array');
-        if (annots) {
-            annots.push(mergedPdf.context.obj(linkAnnotation));
-        } else {
-            page.node.set(mergedPdf.context.obj('Annots'), mergedPdf.context.obj([linkAnnotation]));
-        }
+        page.node.set(
+            'Annots',
+            mergedPdf.context.obj([
+                {
+                    Type: 'Annot',
+                    Subtype: 'Link',
+                    Rect: [x, y, x + textWidth, y + textHeight],
+                    Border: [0, 0, 0],
+                    C: [0, 0, 0],
+                    A: {
+                        Type: 'Action',
+                        S: 'URI',
+                        URI: PDFHexString.fromText(url),
+                    },
+                },
+            ])
+        );
+
     }
 
     const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });

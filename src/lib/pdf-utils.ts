@@ -1,5 +1,4 @@
 import { PDFDocument, StandardFonts, rgb, PDFFont, PDFHexString, PDFName, grayscale } from 'pdf-lib';
-import { ktuhubLogoSvg } from '@/lib/ktuhub-logo';
 
 // Helper to convert data URI to Uint8Array.
 export function dataUriToUint8Array(dataUri: string): Uint8Array {
@@ -31,6 +30,18 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
     mergedPdf.setCreator('KTUHUB');
     mergedPdf.setProducer('KTUHUB');
 
+    // Fetch and embed the watermark image once
+    let watermarkImage;
+    try {
+        // Assuming the logo is at the root of the public folder
+        const imageUrl = new URL('/noise.png', 'https://ktuhub.vercel.app').toString();
+        const imageBytes = await fetch(imageUrl).then(res => res.arrayBuffer());
+        watermarkImage = await mergedPdf.embedPng(imageBytes);
+    } catch(e) {
+        console.error("Could not fetch or embed watermark image", e);
+    }
+
+
     for (const dataUri of pdfDataUris) {
         try {
             const pdfBytes = dataUriToUint8Array(dataUri);
@@ -56,15 +67,16 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
         const { width, height } = page.getSize();
         
         // Watermark
-        const watermarkImage = await mergedPdf.embedSvg(ktuhubLogoSvg);
-        const watermarkDims = watermarkImage.scale(0.3);
-        page.drawImage(watermarkImage, {
-            x: width / 2 - watermarkDims.width / 2,
-            y: height / 2 - watermarkDims.height / 2,
-            width: watermarkDims.width,
-            height: watermarkDims.height,
-            opacity: 0.1,
-        });
+        if (watermarkImage) {
+            const watermarkDims = watermarkImage.scale(0.3);
+            page.drawImage(watermarkImage, {
+                x: width / 2 - watermarkDims.width / 2,
+                y: height / 2 - watermarkDims.height / 2,
+                width: watermarkDims.width,
+                height: watermarkDims.height,
+                opacity: 0.1,
+            });
+        }
 
         // Footer text
         const text = 'Generated from KTUHUB';
@@ -97,15 +109,13 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
             },
         });
         
-        const annots = page.node.lookup(PDFName.of('Annots'));
-        if (annots) {
-          annots.push(mergedPdf.context.register(linkAnnotation));
-        } else {
-          page.node.set(PDFName.of('Annots'), mergedPdf.context.obj([linkAnnotation]));
-        }
+        // This is the correct way to add an annotation
+        const annotations = page.node.Annots() || mergedPdf.context.obj([]);
+        annotations.push(linkAnnotation);
+        page.node.set(PDFName.of('Annots'), annotations);
     }
 
-    const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });
+    const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: false });
     const base64 = uint8ArrayToBase64(mergedPdfBytes);
 
     return `data:application/pdf;base64,${base64}`;

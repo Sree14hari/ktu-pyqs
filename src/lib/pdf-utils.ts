@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, PDFFont, PDFHexString, PDFName } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, PDFFont, PDFHexString, PDFName, grayscale } from 'pdf-lib';
+import { ktuhubLogoSvg } from '@/lib/ktuhub-logo';
 
 // Helper to convert data URI to Uint8Array.
 export function dataUriToUint8Array(dataUri: string): Uint8Array {
@@ -48,11 +49,25 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
     }
 
     const helveticaFont = await mergedPdf.embedFont(StandardFonts.Helvetica);
+    const watermarkImage = await mergedPdf.embedSvg(ktuhubLogoSvg);
+    const watermarkDims = watermarkImage.scale(0.3);
 
-    // Add footer to each page
+
+    // Add footer and watermark to each page
     const pages = mergedPdf.getPages();
     for (const page of pages) {
         const { width, height } = page.getSize();
+        
+        // Watermark
+        page.drawImage(watermarkImage, {
+            x: width / 2 - watermarkDims.width / 2,
+            y: height / 2 - watermarkDims.height / 2,
+            width: watermarkDims.width,
+            height: watermarkDims.height,
+            opacity: 0.1,
+        });
+
+        // Footer text
         const text = 'Generated from KTUHUB';
         const url = 'https://ktuhub.vercel.app';
         const fontSize = 10;
@@ -70,7 +85,8 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
             color: rgb(0.5, 0.5, 0.5),
         });
 
-        const linkAnnotation = {
+        // Add clickable link annotation to the footer text
+        const linkAnnotation = mergedPdf.context.obj({
             Type: 'Annot',
             Subtype: 'Link',
             Rect: [x, y, x + textWidth, y + textHeight],
@@ -80,14 +96,15 @@ export async function mergePdfs(pdfDataUris: string[]): Promise<string> {
                 S: 'URI',
                 URI: PDFHexString.fromText(url),
             },
-        };
-
-        const annots = page.node.lookup(PDFName.of('Annots'));
-        if (annots) {
-            page.node.set(PDFName.of('Annots'), mergedPdf.context.obj([linkAnnotation, ...annots.asArray()]));
-        } else {
-            page.node.set(PDFName.of('Annots'), mergedPdf.context.obj([linkAnnotation]));
+        });
+        
+        const existingAnnots = page.node.lookup(PDFName.of('Annots'));
+        let annotsArray = [];
+        if (existingAnnots) {
+            annotsArray = existingAnnots.asArray().map(ref => mergedPdf.context.lookup(ref));
         }
+        annotsArray.push(linkAnnotation);
+        page.node.set(PDFName.of('Annots'), mergedPdf.context.obj(annotsArray));
     }
 
     const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true });

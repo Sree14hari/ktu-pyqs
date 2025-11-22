@@ -49,42 +49,62 @@ export default async function NotesPage() {
         <p className="mt-4 text-lg text-muted-foreground">A collection of handcrafted notes and guides.</p>
       </header>
 
-      <Card className="mb-8 w-full">
-        <CardHeader>
-          <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
-            <NotebookText className="h-5 w-5 md:h-6 md:w-6" />
-            DM Notes
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm md:text-base text-muted-foreground">Get the complete notes for Disaster Management for free. The notes cover all important topics from all modules with answers.</p>
-        </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row gap-3">
-            <a href="https://drive.google.com/file/d/1kyglvRVOR3j0Cs4EVnD6gMAybyDWI69h/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="w-full">
-                 <Button variant="outline" className="w-full">
-                    <Eye className="mr-2" />
-                    Preview
-                </Button>
-            </a>
-          <a href="https://forms.gle/boCtJ44zST6CD6Nb8" target="_blank" rel="noopener noreferrer" className="w-full">
-            <Button className="w-full">
-              Get it now for free
-            </Button>
-          </a>
-        </CardFooter>
-      </Card>
-
-      {notes.length === 0 ? (
-         <Card className="w-full text-center">
+      <div className="space-y-8">
+        <Card className="w-full">
             <CardHeader>
-                <CardTitle>No Notes Yet!</CardTitle>
+            <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
+                <NotebookText className="h-5 w-5 md:h-6 md:w-6" />
+                DM Notes
+            </CardTitle>
             </CardHeader>
             <CardContent>
-                <p>There are no special notes available right now. Check back later!</p>
+            <p className="text-sm md:text-base text-muted-foreground">Get the complete notes for Disaster Management for free. The notes cover all important topics from all modules with answers.</p>
+            </CardContent>
+            <CardFooter className="flex flex-col sm:flex-row gap-3">
+                <a href="https://drive.google.com/file/d/1kyglvRVOR3j0Cs4EVnD6gMAybyDWI69h/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="w-full">
+                    <Button variant="outline" className="w-full">
+                        <Eye className="mr-2" />
+                        Preview
+                    </Button>
+                </a>
+            <a href="https://forms.gle/boCtJ44zST6CD6Nb8" target="_blank" rel="noopener noreferrer" className="w-full">
+                <Button className="w-full">
+                Get it now for free
+                </Button>
+            </a>
+            </CardFooter>
+        </Card>
+        <Card className="w-full">
+            <CardHeader>
+            <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
+                <NotebookText className="h-5 w-5 md:h-6 md:w-6" />
+                MSS 3 Marks Question Notes
+            </CardTitle>
+            </CardHeader>
+            <CardContent>
+            <p className="text-sm md:text-base text-muted-foreground">Get the complete notes for Management for Software Systems (MSS) 3 marks questions. The notes cover all important topics from all modules with answers.</p>
+            </CardContent>
+            <CardFooter className="flex flex-col sm:flex-row gap-3">
+                <a href="https://forms.gle/fusWSUDzgDvNU9Vu8" target="_blank" rel="noopener noreferrer" className="w-full">
+                    <Button className="w-full">
+                    Get it now for free
+                    </Button>
+                </a>
+            </CardFooter>
+        </Card>
+      </div>
+
+      {notes.length === 0 ? (
+         <Card className="w-full text-center mt-8">
+            <CardHeader>
+                <CardTitle>No Other Notes Yet!</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p>There are no other special notes available right now. Check back later!</p>
             </CardContent>
          </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-1">
+        <div className="grid gap-6 md:grid-cols-1 mt-8">
           {notes.map((note) => (
             <Link href={`/notes/${note.slug}`} key={note.slug} className="block group">
                 <Card className="w-full transition-all hover:shadow-lg hover:-translate-y-1">
